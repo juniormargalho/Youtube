@@ -14,6 +14,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     private static final String GOOGLE_API_KEY = "AIzaSyAIA4u-pSxVeSxVOO8P_-584lqn05-FEnQ";
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer.PlaybackEventListener playbackEventListener;
+    private YouTubePlayer.PlayerStateChangeListener playerStateChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,38 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
         youTubePlayerView = findViewById(R.id.viewYoutubePlayer);
         youTubePlayerView.initialize(GOOGLE_API_KEY, this);
+
+        playerStateChangeListener = new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+                Toast.makeText(MainActivity.this, "Carregando!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoaded(String s) {
+                Toast.makeText(MainActivity.this, "Carregado!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdStarted() {
+                Toast.makeText(MainActivity.this, "Iniciou propaganda!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVideoStarted() {
+                Toast.makeText(MainActivity.this, "Iníciou!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVideoEnded() {
+                Toast.makeText(MainActivity.this, "Finalizou!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+                Toast.makeText(MainActivity.this, "Erro ao executar eventos de carregamento de vídeo!", Toast.LENGTH_SHORT).show();
+            }
+        };
 
         playbackEventListener = new YouTubePlayer.PlaybackEventListener() {
             @Override
@@ -53,7 +86,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean foiRestaurado) {
-        youTubePlayer.setPlaybackEventListener(playbackEventListener);
+        //youTubePlayer.setPlaybackEventListener(playbackEventListener);
+        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
         if(!foiRestaurado){
             //youTubePlayer.cueVideo("C4nursAx-hY");
             youTubePlayer.cuePlaylist("PLWz5rJ2EKKc8ibQFkC77xUETd8BCkRbYc");
