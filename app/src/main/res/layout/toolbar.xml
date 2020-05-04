@@ -11,4 +11,9 @@
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/cinza_medio"/>
 
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </FrameLayout>
