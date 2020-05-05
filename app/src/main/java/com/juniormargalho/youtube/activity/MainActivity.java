@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String GOOGLE_API_KEY = "AIzaSyAIA4u-pSxVeSxVOO8P_-584lqn05-FEnQ";
     private RecyclerView recyclerVideos;
     private List<Video> videos = new ArrayList<>();
     private AdapterVideo adapterVideo;
