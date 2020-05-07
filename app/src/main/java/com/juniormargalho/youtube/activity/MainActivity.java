@@ -12,17 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.juniormargalho.youtube.R;
 import com.juniormargalho.youtube.adapter.AdapterVideo;
+import com.juniormargalho.youtube.api.YoutubeService;
+import com.juniormargalho.youtube.helper.RetrofitConfig;
+import com.juniormargalho.youtube.helper.YoutubeConfig;
+import com.juniormargalho.youtube.model.Resultado;
 import com.juniormargalho.youtube.model.Video;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerVideos;
     private List<Video> videos = new ArrayList<>();
     private AdapterVideo adapterVideo;
     private MaterialSearchView searchView;
+
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         //inicializar componentes
         recyclerVideos = findViewById(R.id.recyclerVideos);
         searchView = findViewById(R.id.searchView);
+
+        //configuracoes iniciais
+        retrofit = RetrofitConfig.getRetrofit();
 
         //toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -74,13 +88,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void recuperarVideos(){
 
-        Video video1 = new Video();
-        video1.setTitulo("Video 1 muito interessante!");
-        videos.add(video1);
+        YoutubeService youtubeService = retrofit.create(YoutubeService.class);
+        youtubeService.recuperarVideos("snippet","date","20", YoutubeConfig.CHAVE_YOUTUBE_API, YoutubeConfig.CANAL_ID)
+                .enqueue(new Callback<Resultado>() {
+                    @Override
+                    public void onResponse(Call<Resultado> call, Response<Resultado> response) {
 
-        Video video2 = new Video();
-        video2.setTitulo("Video 2 muito interessante!");
-        videos.add(video2);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Resultado> call, Throwable t) {
+
+                    }
+                });
+
     }
 
     @Override
