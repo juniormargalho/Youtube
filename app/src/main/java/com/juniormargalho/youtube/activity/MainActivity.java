@@ -15,6 +15,7 @@ import com.juniormargalho.youtube.adapter.AdapterVideo;
 import com.juniormargalho.youtube.api.YoutubeService;
 import com.juniormargalho.youtube.helper.RetrofitConfig;
 import com.juniormargalho.youtube.helper.YoutubeConfig;
+import com.juniormargalho.youtube.model.Item;
 import com.juniormargalho.youtube.model.Resultado;
 import com.juniormargalho.youtube.model.Video;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -29,11 +30,11 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerVideos;
-    private List<Video> videos = new ArrayList<>();
     private AdapterVideo adapterVideo;
     private MaterialSearchView searchView;
-
     private Retrofit retrofit;
+    private Resultado resultado;
+    private List<Item> videos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         recuperarVideos();
-
-        //adapter
-        adapterVideo = new AdapterVideo(videos, this);
-
-        //recyclerView
-        recyclerVideos.setHasFixedSize(true);
-        recyclerVideos.setLayoutManager(new LinearLayoutManager(this));
-        recyclerVideos.setAdapter(adapterVideo);
 
         //searchView
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -93,15 +86,24 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<Resultado>() {
                     @Override
                     public void onResponse(Call<Resultado> call, Response<Resultado> response) {
-
+                        if(response.isSuccessful()){
+                            resultado = response.body();
+                            videos = resultado.items;
+                            configuraRecyclerView();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Resultado> call, Throwable t) {
-
                     }
                 });
+    }
 
+    public void configuraRecyclerView(){
+        adapterVideo = new AdapterVideo(videos, this);
+        recyclerVideos.setHasFixedSize(true);
+        recyclerVideos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerVideos.setAdapter(adapterVideo);
     }
 
     @Override
