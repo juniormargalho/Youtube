@@ -1,9 +1,12 @@
 package com.juniormargalho.youtube.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,11 +18,13 @@ import com.juniormargalho.youtube.adapter.AdapterVideo;
 import com.juniormargalho.youtube.api.YoutubeService;
 import com.juniormargalho.youtube.helper.RetrofitConfig;
 import com.juniormargalho.youtube.helper.YoutubeConfig;
+import com.juniormargalho.youtube.listener.RecyclerItemClickListener;
 import com.juniormargalho.youtube.model.Item;
 import com.juniormargalho.youtube.model.Resultado;
 import com.juniormargalho.youtube.model.Video;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +109,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerVideos.setHasFixedSize(true);
         recyclerVideos.setLayoutManager(new LinearLayoutManager(this));
         recyclerVideos.setAdapter(adapterVideo);
+
+        recyclerVideos.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerVideos,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Item video = videos.get(position);
+                        String idVideo = video.id.videoId;
+                        Intent i = new Intent(MainActivity.this, PlayerActivity.class);
+                        i.putExtra("idVideo", idVideo);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    }
+                }));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.juniormargalho.youtube.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.juniormargalho.youtube.R;
 import com.juniormargalho.youtube.model.Item;
 import com.juniormargalho.youtube.model.Video;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +37,11 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
         Item video = videos.get(position);
         holder.titulo.setText(video.snippet.title);
-
+        String url = video.snippet.thumbnails.high.url;
+        Picasso.get().load(url).into(holder.capa);
+        Log.i("url",url);
     }
 
     @Override
