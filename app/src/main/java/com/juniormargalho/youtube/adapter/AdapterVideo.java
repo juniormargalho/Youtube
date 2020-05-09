@@ -41,7 +41,6 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
         holder.titulo.setText(video.snippet.title);
         String url = video.snippet.thumbnails.high.url;
         Picasso.get().load(url).into(holder.capa);
-        Log.i("url",url);
     }
 
     @Override
